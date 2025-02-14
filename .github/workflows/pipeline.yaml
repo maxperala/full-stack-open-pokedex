@@ -24,8 +24,8 @@ jobs:
         run: npm run test
       - name: install pw browsers
         run: npx playwright install --with-deps
-      - name: start app
-        run: npm run start-prod
       - name: e2e test
-        run: npm run test:e2e
+        run: |
+          npm run start-prod &
+          npm run test:e2e
         
