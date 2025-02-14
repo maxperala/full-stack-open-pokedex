@@ -31,6 +31,7 @@ jobs:
   deploy:
     name: Deploy app
     runs-on: ubuntu-20.04
+    timeout-minutes: 5
     needs: simple_deployment_pipeline
     concurrency: deploy-group
     steps:
