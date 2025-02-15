@@ -34,27 +34,19 @@ jobs:
 
   tag_release:
     needs: simple_deployment_pipeline
-    if: >
-      ${{ 
-        github.event_name == 'push' && 
-        !contains(join(github.event.commits.*.message, ' '), '#skip') 
-      }}
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
+
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
       - name: bump version and push tag
-        if: ${{ github.event_name == 'push' }}
         uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
 
   deploy:
-    if: >
-      ${{ 
-        github.event_name == 'push' && 
-        !contains(join(github.event.commits.*.message, ' '), '#skip') 
-      }}
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
     name: Deploy app
     runs-on: ubuntu-20.04
     timeout-minutes: 5
