@@ -34,7 +34,11 @@ jobs:
 
   tag_release:
     needs: simple_deployment_pipeline
-    if: ${{ github.event_name == 'push' }}
+    if: >
+      ${{ 
+        github.event_name == 'push' && 
+        !contains(join(github.event.commits.*.message, ' '), '#skip') 
+      }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
@@ -46,7 +50,11 @@ jobs:
           DEFAULT_BUMP: patch
 
   deploy:
-    if: ${{ github.event_name == 'push' }}
+    if: >
+      ${{ 
+        github.event_name == 'push' && 
+        !contains(join(github.event.commits.*.message, ' '), '#skip') 
+      }}
     name: Deploy app
     runs-on: ubuntu-20.04
     timeout-minutes: 5
