@@ -37,6 +37,7 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v4
       - name: bump version and push tag
         if: ${{ github.event_name == 'push' }}
         uses: anothrNick/github-tag-action@1.71.0
@@ -49,7 +50,7 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-20.04
     timeout-minutes: 5
-    needs: simple_deployment_pipeline
+    needs: [simple_deployment_pipeline, tag_release]
     concurrency: deploy-group
     steps:
       - uses: actions/checkout@v4
