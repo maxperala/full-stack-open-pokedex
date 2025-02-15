@@ -63,13 +63,19 @@ jobs:
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      - name: notify
-        uses: sarisia/actions-status-discord@v1
-        if: always()
+      - name: notify success
+        if: success()
+        uses: tsickert/discord-webhook@v6.0.0
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: ${{ job.status }}
-          content: ${{ job.status == 'failure' ? 'Deployment failed on commit ' + github.sha : 'A new deployment was made' }}
-          title: "deploy"
-          description: ${{ job.status == 'failure' ? 'Deployment failed on commit ' + github.sha : 'Build and deploy to Fly.io' }}
-          url: "https://full-stack-open-pokedex-cool-fire-3967.fly.dev/"
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: |
+            A new version was deployed!
+            Deployed to https://full-stack-open-pokedex-cool-fire-3967.fly.dev/
+      - name: notify fail
+        if: ${{ always() && failure() }}
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: |
+            Deployment failed!
+            Commit ${{ github.sha }} broke it
