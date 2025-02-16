@@ -1,0 +1,17 @@
+name: health check
+
+on:
+  schedule:
+    - cron: "* * * * *"
+  push:
+    branches:
+      - main
+
+jobs:
+  check_app_live:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: check health
+        uses: jtalk/url-health-check-action@v4
+        with:
+          url: https://full-stack-open-pokedex-cool-fire-3967.fly.dev/
