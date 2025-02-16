@@ -2,11 +2,7 @@ name: health check
 
 on:
   schedule:
-    - cron: "* * * * *"
-  push:
-    branches:
-      - main
-      - development
+    - cron: "0 0 * * *"
 
 jobs:
   check_app_live:
